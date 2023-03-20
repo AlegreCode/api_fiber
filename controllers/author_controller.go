@@ -15,6 +15,12 @@ type AuthorHandler struct {
 	db *gorm.DB
 }
 
+func (ah *AuthorHandler) GetAllAuthors(c *fiber.Ctx) error {
+	var authors []models.Author
+	ah.db.Find(&authors)
+	return c.JSON(authors)
+}
+
 func (ah *AuthorHandler) CreateAuthor(c *fiber.Ctx) error {
 
 	author := new(models.Author)
