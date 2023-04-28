@@ -13,4 +13,10 @@ func Router(app *fiber.App, db *gorm.DB) {
 	app.Get("/authors", authorController.GetAllAuthors)
 
 	app.Post("/author", authorController.CreateAuthor)
+
+	app.Get("/author/:id", authorController.GetAuthor)
+
+	app.Put("/author/:id", authorController.UpdateAuthor)
+
+	app.Delete("/author/:id", authorController.DeleteAuthor)
 }
