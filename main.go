@@ -19,7 +19,7 @@ func main() {
 
 	db.AutoMigrate(&models.Author{}, &models.Book{})
 
-	api.Router(app, db)
+	api.Router(app)
 
 	app.Listen(":3000")
 }
