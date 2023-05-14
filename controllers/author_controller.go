@@ -2,26 +2,21 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 
+	"github.com/alegrecode/api_fiber/database"
 	"github.com/alegrecode/api_fiber/models"
 )
 
-func AuthorController(db *gorm.DB) *AuthorHandler {
-	return &AuthorHandler{db}
+type AuthorController struct {
 }
 
-type AuthorHandler struct {
-	db *gorm.DB
-}
-
-func (ah *AuthorHandler) GetAllAuthors(c *fiber.Ctx) error {
+func (ac *AuthorController) GetAllAuthors(c *fiber.Ctx) error {
 	var authors []models.Author
-	ah.db.Find(&authors)
+	database.DB.Find(&authors)
 	return c.JSON(authors)
 }
 
-func (ah *AuthorHandler) CreateAuthor(c *fiber.Ctx) error {
+func (ac *AuthorController) CreateAuthor(c *fiber.Ctx) error {
 
 	author := new(models.Author)
 
@@ -32,14 +27,16 @@ func (ah *AuthorHandler) CreateAuthor(c *fiber.Ctx) error {
 		})
 	}
 
-	ah.db.Create(&author)
+	database.DB.Create(&author)
 	return c.JSON(author)
 }
 
-func (ah *AuthorHandler) GetAuthor(c *fiber.Ctx) error {
+func (ac *AuthorController) GetAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
-	ah.db.First(&author, id)
+
+	database.DB.First(&author, id)
+	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -50,10 +47,12 @@ func (ah *AuthorHandler) GetAuthor(c *fiber.Ctx) error {
 	return c.JSON(author)
 }
 
-func (ah *AuthorHandler) UpdateAuthor(c *fiber.Ctx) error {
+func (ac *AuthorController) UpdateAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
-	ah.db.First(&author, id)
+
+	database.DB.First(&author, id)
+	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -72,15 +71,19 @@ func (ah *AuthorHandler) UpdateAuthor(c *fiber.Ctx) error {
 
 	author.Name = updatedAuthor.Name
 	author.Lastname = updatedAuthor.Lastname
-	ah.db.Save(&author)
+
+	database.DB.Save(&author)
+	// ah.db.Save(&author)
 
 	return c.JSON(author)
 }
 
-func (ah *AuthorHandler) DeleteAuthor(c *fiber.Ctx) error {
+func (ac *AuthorController) DeleteAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
-	ah.db.First(&author, id)
+
+	database.DB.First(&author, id)
+	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -88,7 +91,8 @@ func (ah *AuthorHandler) DeleteAuthor(c *fiber.Ctx) error {
 		})
 	}
 
-	ah.db.Delete(&author)
+	database.DB.Delete(&author)
+	// ah.db.Delete(&author)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Author deleted",
