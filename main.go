@@ -11,11 +11,7 @@ import (
 func main() {
 	app := fiber.New()
 
-	db, err := database.ConnectDB()
-
-	if err != nil {
-		panic("Could not connect to the database.")
-	}
+	db := database.ConnectDB()
 
 	db.AutoMigrate(&models.Author{}, &models.Book{})
 
