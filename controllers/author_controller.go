@@ -36,7 +36,6 @@ func (ac *AuthorController) GetAuthor(c *fiber.Ctx) error {
 	var author models.Author
 
 	database.DB.First(&author, id)
-	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -52,7 +51,6 @@ func (ac *AuthorController) UpdateAuthor(c *fiber.Ctx) error {
 	var author models.Author
 
 	database.DB.First(&author, id)
-	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -60,20 +58,14 @@ func (ac *AuthorController) UpdateAuthor(c *fiber.Ctx) error {
 		})
 	}
 
-	updatedAuthor := new(models.Author)
-
-	if err := c.BodyParser(&updatedAuthor); err != nil {
+	if err := c.BodyParser(&author); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Could not update author",
 			"error":   err.Error(),
 		})
 	}
 
-	author.Name = updatedAuthor.Name
-	author.Lastname = updatedAuthor.Lastname
-
-	database.DB.Save(&author)
-	// ah.db.Save(&author)
+	database.DB.Model(&author).Updates(&author)
 
 	return c.JSON(author)
 }
@@ -83,7 +75,6 @@ func (ac *AuthorController) DeleteAuthor(c *fiber.Ctx) error {
 	var author models.Author
 
 	database.DB.First(&author, id)
-	// ah.db.First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -92,7 +83,6 @@ func (ac *AuthorController) DeleteAuthor(c *fiber.Ctx) error {
 	}
 
 	database.DB.Delete(&author)
-	// ah.db.Delete(&author)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Author deleted",
