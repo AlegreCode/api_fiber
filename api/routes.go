@@ -20,5 +20,7 @@ func Router(app *fiber.App) {
 
 	app.Delete("/author/:id", authorController.DeleteAuthor)
 
+	app.Get("/books", bookController.GetAllBooks)
+
 	app.Post("/book", bookController.CreateBook)
 }
