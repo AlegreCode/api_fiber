@@ -28,6 +28,7 @@ func (bc *BookController) CreateBook(c *fiber.Ctx) error {
 		})
 	}
 
+	book.Author = author
 	database.DB.Create(&book)
 	return c.JSON(book)
 }
