@@ -32,3 +32,9 @@ func (bc *BookController) CreateBook(c *fiber.Ctx) error {
 	database.DB.Create(&book)
 	return c.JSON(book)
 }
+
+func (bc *BookController) GetAllBooks(c *fiber.Ctx) error {
+	var books []models.Book
+	database.DB.Preload("Author").Find(&books)
+	return c.JSON(books)
+}
