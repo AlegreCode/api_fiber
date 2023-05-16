@@ -1,22 +1,18 @@
 package controllers
 
 import (
+	"github.com/alegrecode/api_fiber/database"
 	"github.com/alegrecode/api_fiber/models"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
-func BookController(db *gorm.DB, authorHandler *AuthorHandler) *BookHandler {
-	return &BookHandler{db: db, authorHandler: authorHandler}
+type BookController struct {
 }
 
-type BookHandler struct {
-	db            *gorm.DB
-	authorHandler *AuthorHandler
-}
-
-func (bh *BookHandler) CreateBook(c *fiber.Ctx) error {
+func (bc *BookController) CreateBook(c *fiber.Ctx) error {
 	var book models.Book
+	var author models.Author
+
 	if err := c.BodyParser(&book); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Could not create book",
@@ -24,14 +20,14 @@ func (bh *BookHandler) CreateBook(c *fiber.Ctx) error {
 		})
 	}
 
-	author, err := bh.authorHandler.GetAuthor(book.AuthorID)
-	if err != nil {
+	result := database.DB.First(&author, book.AuthorID)
+
+	if result.Error != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid author ID",
 		})
 	}
 
-	book.Author = *author
-	bh.db.Create(&book)
+	database.DB.Create(&book)
 	return c.JSON(book)
 }
