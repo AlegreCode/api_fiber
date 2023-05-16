@@ -12,7 +12,7 @@ type AuthorController struct {
 
 func (ac *AuthorController) GetAllAuthors(c *fiber.Ctx) error {
 	var authors []models.Author
-	database.DB.Find(&authors)
+	database.DB.Preload("Books").Find(&authors)
 	return c.JSON(authors)
 }
 
@@ -35,7 +35,7 @@ func (ac *AuthorController) GetAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
 
-	database.DB.First(&author, id)
+	database.DB.Preload("Books").First(&author, id)
 
 	if author.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
