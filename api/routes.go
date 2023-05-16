@@ -7,7 +7,8 @@ import (
 
 func Router(app *fiber.App) {
 
-	var authorController = *&controllers.AuthorController{}
+	var authorController = &controllers.AuthorController{}
+	var bookController = &controllers.BookController{}
 
 	app.Get("/authors", authorController.GetAllAuthors)
 
@@ -18,4 +19,6 @@ func Router(app *fiber.App) {
 	app.Put("/author/:id", authorController.UpdateAuthor)
 
 	app.Delete("/author/:id", authorController.DeleteAuthor)
+
+	app.Post("/book", bookController.CreateBook)
 }
