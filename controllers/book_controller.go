@@ -38,3 +38,10 @@ func (bc *BookController) GetAllBooks(c *fiber.Ctx) error {
 	database.DB.Preload("Author").Find(&books)
 	return c.JSON(books)
 }
+
+func (bc *BookController) GetBook(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var book models.Book
+	database.DB.Preload("Author").First(&book, id)
+	return c.JSON(book)
+}
