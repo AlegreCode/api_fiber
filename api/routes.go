@@ -23,4 +23,6 @@ func Router(app *fiber.App) {
 	app.Get("/books", bookController.GetAllBooks)
 
 	app.Post("/book", bookController.CreateBook)
+
+	app.Get("/book/:id", bookController.GetBook)
 }
