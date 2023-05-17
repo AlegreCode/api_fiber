@@ -25,4 +25,6 @@ func Router(app *fiber.App) {
 	app.Post("/book", bookController.CreateBook)
 
 	app.Get("/book/:id", bookController.GetBook)
+
+	app.Put("/book/:id", bookController.UpdateBook)
 }
