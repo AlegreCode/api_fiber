@@ -45,3 +45,27 @@ func (bc *BookController) GetBook(c *fiber.Ctx) error {
 	database.DB.Preload("Author").First(&book, id)
 	return c.JSON(book)
 }
+
+func (bc *BookController) UpdateBook(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var book models.Book
+
+	result := database.DB.First(&book, id)
+
+	if result.Error != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid book ID",
+		})
+	}
+
+	if err := c.BodyParser(&book); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Could not update author",
+			"error":   err.Error(),
+		})
+	}
+
+	database.DB.Model(&book).Updates(&book)
+
+	return c.JSON(book)
+}
