@@ -35,9 +35,9 @@ func (ac *AuthorController) GetAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
 
-	database.DB.Preload("Books").First(&author, id)
+	result := database.DB.Preload("Books").First(&author, id)
 
-	if author.ID == 0 {
+	if result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Author not found",
 		})
@@ -50,9 +50,9 @@ func (ac *AuthorController) UpdateAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
 
-	database.DB.First(&author, id)
+	result := database.DB.First(&author, id)
 
-	if author.ID == 0 {
+	if result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Author not found",
 		})
@@ -74,9 +74,9 @@ func (ac *AuthorController) DeleteAuthor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var author models.Author
 
-	database.DB.First(&author, id)
+	result := database.DB.First(&author, id)
 
-	if author.ID == 0 {
+	if result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Author not found",
 		})
