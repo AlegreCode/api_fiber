@@ -42,7 +42,12 @@ func (bc *BookController) GetAllBooks(c *fiber.Ctx) error {
 func (bc *BookController) GetBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var book models.Book
-	database.DB.Preload("Author").First(&book, id)
+	result := database.DB.Preload("Author").First(&book, id)
+	if result.Error != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Book not found",
+		})
+	}
 	return c.JSON(book)
 }
 
@@ -83,5 +88,7 @@ func (bc *BookController) DeleteBook(c *fiber.Ctx) error {
 	}
 
 	database.DB.Delete(&book)
-	return c.JSON(book)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Book deleted"
+	})
 }
