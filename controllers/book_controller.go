@@ -69,3 +69,19 @@ func (bc *BookController) UpdateBook(c *fiber.Ctx) error {
 
 	return c.JSON(book)
 }
+
+func (bc *BookController) DeleteBook(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var book models.Book
+
+	result := database.DB.First(&book, id)
+
+	if result.Error != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid book ID",
+		})
+	}
+
+	database.DB.Delete(&book)
+	return c.JSON(book)
+}
