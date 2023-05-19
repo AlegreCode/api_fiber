@@ -27,4 +27,6 @@ func Router(app *fiber.App) {
 	app.Get("/book/:id", bookController.GetBook)
 
 	app.Put("/book/:id", bookController.UpdateBook)
+
+	app.Delete("/book/:id", bookController.DeleteBook)
 }
