@@ -89,6 +89,6 @@ func (bc *BookController) DeleteBook(c *fiber.Ctx) error {
 
 	database.DB.Delete(&book)
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Book deleted"
+		"message": "Book deleted",
 	})
 }
